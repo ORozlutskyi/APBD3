@@ -12,9 +12,14 @@ public class ContainerPlyn : Container, IHazardNotifier
         Number++;
     }
 
-    public override void OproznienieLadunku()
+    public override void OproznienieLadunku(double masa)
     {
-        MasaLadunku = 0;
+        MasaLadunku -= masa;
+        if (MasaLadunku < 0)
+        {
+            Console.WriteLine("You can't unfill that much");
+            MasaLadunku += masa;
+        }
     }
 
     public override void Zaladowac(double masa)
@@ -22,14 +27,13 @@ public class ContainerPlyn : Container, IHazardNotifier
         try
         {
             double NewMasa = MasaLadunku += masa;
-            if ((NewMasa > (MaxLadownosc / 2)) && TypLadunku == "hazard")
+            if (((NewMasa > (MaxLadownosc / 2)) && TypLadunku == "hazard") || NewMasa > (MaxLadownosc * 0.9))
             {
                 HazardDetected();
-            } else if (NewMasa > (MaxLadownosc * 0.9))
-            {
-                HazardDetected();
+                MasaLadunku -= masa;
             } else if (NewMasa > MaxLadownosc)
             {
+                MasaLadunku -= masa;
                 throw new OverfillException("Nie mozna wiecej");
             }
         }
@@ -41,6 +45,6 @@ public class ContainerPlyn : Container, IHazardNotifier
 
     public void HazardDetected()
     {
-        Console.WriteLine("i huj");
+        Console.WriteLine("No, you are dalbayod, Numer seryjny kontenera: "+ NumerSeryjny);
     }
 }

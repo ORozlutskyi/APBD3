@@ -18,7 +18,7 @@ public abstract class Container
                 MaxLadownosc = maxLadownosc;
         }
 
-        public abstract void OproznienieLadunku();
+        public abstract void OproznienieLadunku(double masa);
 
         public abstract void Zaladowac(double masa);
 

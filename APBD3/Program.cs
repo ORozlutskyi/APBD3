@@ -8,7 +8,7 @@ public class main
         ContainerPlyn cont = new ContainerPlyn(100, 100, 100, 100, "hazard");
         
         cont.Zaladowac(40);
-        cont.Zaladowac(5);
+        cont.Zaladowac(15);
         Console.WriteLine(cont.MasaLadunku);
         Console.WriteLine(cont.NumerSeryjny);
         ContainerPlyn cont2 = new ContainerPlyn(100, 100, 100, 100, "normal");
