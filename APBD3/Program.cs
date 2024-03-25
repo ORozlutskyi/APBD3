@@ -3,6 +3,8 @@ using APBD3.Models.Base;
 
 public class main
 {
+    public static Dictionary<string, double> mapaProduktow = new Dictionary<string, double>();
+    
     public static void Main(string[] args)
     {
         ContainerPlyn cont = new ContainerPlyn(100, 100, 100, 100, "hazard");

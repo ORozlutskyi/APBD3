@@ -2,19 +2,28 @@
 
 namespace APBD3.Models;
 
-public class ContainerGaz : Container, IHazardNotifier
+public class ContainerChlodniczy : Container, IHazardNotifier
 {
-    public double Cisnienie { get; set; }
+    private double Tempreture;
+    private string Produkt = "";
     
-    public ContainerGaz(double height, double masaWlasna, double glebokosc, double maxLadownosc, double cisnienie) : base(height, masaWlasna, glebokosc, maxLadownosc)
+    public ContainerChlodniczy(double height, double masaWlasna, double glebokosc, double maxLadownosc, double tempreture) : base(height, masaWlasna, glebokosc, maxLadownosc)
     {
-        Cisnienie = cisnienie;
+        Tempreture = tempreture;
+    }
+
+    public void SetProdukt(string produkt)
+    {
+        if (Produkt != "" && Tempreture > main.mapaProduktow[Produkt])
+        {
+            Produkt = produkt;
+        }
     }
 
     public override void OproznienieLadunku(double masa)
     {
         MasaLadunku -= masa;
-        if (MasaLadunku < MaxLadownosc * 0.05)
+        if (MasaLadunku < 0)
         {
             Console.WriteLine("You can't unfill that much");
             MasaLadunku += masa;

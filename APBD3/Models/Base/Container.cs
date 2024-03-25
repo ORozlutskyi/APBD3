@@ -2,7 +2,19 @@
 
 public abstract class Container
 {
-        public double MasaLadunku { get; set; } = 0;
+        protected double masaLadunku;
+
+        public double MasaLadunku
+        {
+                get
+                {
+                        return masaLadunku;
+                }
+                set
+                {
+                        masaLadunku = value;
+                }
+        }
         protected double Height{ get; }
         protected double MasaWlasna{ get; }
         protected double Glebokosc{ get; }
