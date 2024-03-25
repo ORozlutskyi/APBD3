@@ -2,28 +2,21 @@
 
 namespace APBD3.Models;
 
-public class ContainerChlodniczy : Container, IHazardNotifier
+public class KonteinerGaz : Konteiner, IHazardNotifier
 {
-    private double Tempreture;
-    private string Produkt = "";
+    public double Cisnienie { get; set; }
     
-    public ContainerChlodniczy(double height, double masaWlasna, double glebokosc, double maxLadownosc, double tempreture) : base(height, masaWlasna, glebokosc, maxLadownosc)
+    public KonteinerGaz(double height, double masaWlasna, double glebokosc, double maxLadownosc, double cisnienie) : base(height, masaWlasna, glebokosc, maxLadownosc)
     {
-        Tempreture = tempreture;
-    }
-
-    public void SetProdukt(string produkt)
-    {
-        if (Produkt != "" && Tempreture > main.mapaProduktow[Produkt])
-        {
-            Produkt = produkt;
-        }
+        Cisnienie = cisnienie;
+        NumerSeryjny = "KON-L-" + Number;
+        Number++;
     }
 
     public override void OproznienieLadunku(double masa)
     {
         MasaLadunku -= masa;
-        if (MasaLadunku < 0)
+        if (MasaLadunku < MaxLadownosc * 0.05)
         {
             Console.WriteLine("You can't unfill that much");
             MasaLadunku += masa;
@@ -50,5 +43,10 @@ public class ContainerChlodniczy : Container, IHazardNotifier
     public void HazardDetected()
     {
         Console.WriteLine("No, you are dalbayod, Numer seryjny kontenera: "+ NumerSeryjny);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + ", " + Cisnienie;
     }
 }

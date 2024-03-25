@@ -2,14 +2,28 @@
 
 namespace APBD3.Models;
 
-public class ContainerPlyn : Container, IHazardNotifier
+public class KonteinerChlodniczy : Konteiner, IHazardNotifier
 {
-    protected string TypLadunku;
-    public ContainerPlyn(double height, double masaWlasna, double glebokosc, double maxLadownosc, string typLadunku) : base( height, masaWlasna, glebokosc, maxLadownosc)
+    private double Tempreture;
+    private string Produkt = "";
+    
+    public KonteinerChlodniczy(double height, double masaWlasna, double glebokosc, double maxLadownosc, double tempreture) : base(height, masaWlasna, glebokosc, maxLadownosc)
     {
-        TypLadunku = typLadunku;
+        Tempreture = tempreture;
         NumerSeryjny = "KON-L-" + Number;
         Number++;
+    }
+
+    public void SetProdukt(string produkt)
+    {
+        if (Produkt == "" && Tempreture > Program.mapaProduktow[produkt])
+        {
+            Produkt = produkt;
+        }
+        else
+        {
+            Console.WriteLine("Zbyt wysoka temp lub produkt już jest ustalony");
+        }
     }
 
     public override void OproznienieLadunku(double masa)
@@ -27,11 +41,7 @@ public class ContainerPlyn : Container, IHazardNotifier
         try
         {
             double NewMasa = MasaLadunku += masa;
-            if (((NewMasa > (MaxLadownosc / 2)) && TypLadunku == "hazard") || NewMasa > (MaxLadownosc * 0.9))
-            {
-                HazardDetected();
-                MasaLadunku -= masa;
-            } else if (NewMasa > MaxLadownosc)
+            if (NewMasa > MaxLadownosc)
             {
                 MasaLadunku -= masa;
                 throw new OverfillException("Nie mozna wiecej");
@@ -40,11 +50,16 @@ public class ContainerPlyn : Container, IHazardNotifier
         catch (OverfillException e)
         {
             Console.WriteLine(e);
-        }
+        };
     }
 
     public void HazardDetected()
     {
         Console.WriteLine("No, you are dalbayod, Numer seryjny kontenera: "+ NumerSeryjny);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + ", " + Tempreture + ", " + Produkt;
     }
 }

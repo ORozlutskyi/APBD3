@@ -1,13 +1,25 @@
 ﻿using System.ComponentModel;
+using APBD3.Models.Base;
 
 namespace APBD3.Models;
 
 public class Kontenierowiec
 {
-    private List<Container> _containers = new List<Container>();
-    private double wagaKontenerow;
+    private List<Konteiner> _containers = new List<Konteiner>();
+    private double wagaKontenerow = 0;
+    public double WagaKontenerow
+    {
+        get
+        {
+            return wagaKontenerow;
+        }
+        set
+        {
+            wagaKontenerow = value;
+        }
+    }
     
-    public List<Container> Containers
+    public List<Konteiner> Containers
     {
         get
         {
@@ -65,6 +77,65 @@ public class Kontenierowiec
         this.maxIloscKontenerow = maxIloscKontenerow;
         this.maxWaga = maxWaga;
     }
+
+    public void AddContainer(Konteiner cont)
+    {
+        wagaKontenerow += cont.MasaLadunku + cont.MasaWlasna;
+        if (wagaKontenerow > maxWaga)
+        {
+            Console.WriteLine("Nie możesz dodać tego konteneru, waga jest za duża");
+            wagaKontenerow -= cont.MasaLadunku + cont.MasaWlasna;
+        }
+        else
+        {
+            _containers.Add(cont);
+        }
+    }
+
+    public void AddContainers(List<Konteiner> conts)
+    {
+        foreach (Konteiner kont in conts)
+        {
+            AddContainer(kont);
+        }
+    }
     
-    
+    public void DeleteContainer(string numerSeryjny)
+    {
+        foreach (Konteiner kont in _containers)
+        {
+            if (kont.NumerSeryjny == numerSeryjny) _containers.Remove(kont);
+        }
+    }
+
+    public void ChangeContainers(string numerSeryjny, Konteiner kont)
+    {
+        for (int i = 0; i < _containers.Count; i++)
+        {
+            if (_containers[i].NumerSeryjny == numerSeryjny)
+            {
+                if (wagaKontenerow + kont.MasaWlasna + kont.MasaLadunku > maxWaga)
+                {
+                    Console.WriteLine("Nie możesz zamienić, waga podanego kontenera jest zbyt duża");
+                }
+                else
+                {
+                    _containers.Remove(_containers[i]);
+                    _containers.Insert(i, kont);
+                }
+            }
+        }
+    }
+
+    public void ShipContainerToAnotherContainerShip(string numerSeryjny, Kontenierowiec kont)
+    {
+        for (int i = 0; i < _containers.Count; i++)
+        {
+            if (_containers[i].NumerSeryjny == numerSeryjny)
+            {
+                kont.AddContainer(_containers[i]);
+                _containers.Remove(_containers[i]);
+            }
+        }
+    }
 }
